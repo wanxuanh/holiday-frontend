@@ -1,23 +1,23 @@
+import { useEffect, useState } from "react";
+import urlcat from 'urlcat';
 
-
-import {useEffect, useState} from "react";
+const BACKEND = process.env.REACT_APP_BACKEND ?? "http://localhost:3000" 
 
 function Seed() {
-    const [seed, setSeed] = useState([]);
+  const [seed, setSeed] = useState([]);
 
-    useEffect(() =>{
-fetch('https://wxuanh-holiday.herokuapp.com/api/holidays/seed')
-.then(response => response.json())
-.then(data => console.log(data));
+  useEffect(() => {
+    fetch(urlcat(BACKEND, "/api/holidays/seed"))
+      .then((response) => response.json())
+      .then((data) => setSeed(data));
+  }, []);
 
-    }, []);
-    return(
-        <>
-        <h1>Seed</h1>
-        <pre>{JSON.stringify(seed, null, 2)}</pre>
-
-        </>
-    )
+  return (
+    <>
+      <h1>Seed 2</h1>
+      <pre>{JSON.stringify(seed, null, 2)}</pre>
+    </>
+  );
 }
 
 export default Seed;
