@@ -15,6 +15,23 @@ function HolidayList() {
     const url = urlcat(BACKEND, `/api/holidays/${id}`);
     fetch(url, { method: "DELETE" })
       .then((response) => response.json())
+      .then((data) =>{
+          setHolidays( holidays.filter(h => h._id !== id))
+      });
+  };
+
+  const handleUpdate = (holiday) => () => {
+    const url = urlcat(BACKEND, `/api/holidays/${holiday._id}`);
+    const newHoliday = { ...holiday, likes: holiday.likes + 10 }
+    
+    fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newHoliday),
+    })
+      .then((response) => response.json())
       .then((data) => console.log(data));
   };
 
@@ -22,9 +39,9 @@ function HolidayList() {
     <>
       <ul>
         {holidays.map((holiday) => (
-          <li key={holiday._id}>
-            <a href="/">{holiday.name}</a>
-            {" -- "}
+           <li key={holiday._id}>
+            {holiday.name} -- <span onClick={handleUpdate(holiday)}>{holiday.likes}</span>
+            --
             <span onClick={handleDelete(holiday._id)}>Delete</span>
           </li>
         ))}
